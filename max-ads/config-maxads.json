@@ -1,0 +1,9 @@
+{
+    "appData":{
+        "name": "subwaysurf",
+        "platform": "android",
+        "package_name": "com.kiloo.subwaysurf",
+        "ad_format": "INTER"
+     },
+     "managementApiKey":"uh7CPy_HiWa5sbU5oLy4el0dCoTyLy1EWsIKayul2ia_Nd1oEiIegyUZ0fgwHLwBbFEVbEWxglNXikGCTAGZkN"
+}
