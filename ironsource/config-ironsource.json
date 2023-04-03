@@ -1,0 +1,40 @@
+{
+    "secretKey":"75eb5509a2c5f14d6b39d0ffe8bfa855",
+    "refreshToken":"f902f7b51ddd9968ddf8a05f86cb54cb",
+    "appData": {
+        "storeUrl": "https://play.google.com/store/apps/details?id=com.dts.freefiremax",
+        "taxonomy": "puzzle",
+        "appName": "freefiremax",
+        "coppa":1,
+        "ccpa":0,
+        "adUnits": {
+          "RewardedVideo": "Live",
+          "Interstitial": "Live",
+          "OfferWall": "Off",
+          "Banner": "Live"
+        }
+      },
+      "placementData" : {
+        "placements": [
+          {
+            "adUnit": "rewardedVideo",
+            "name": "Main_Menu",
+            "itemName": "coin",
+            "rewardAmount": 25, 
+            "capping": {
+                "enabled": 1,
+          "cappingLimit": 3,
+          "cappingInterval": "h" 
+            }
+          },
+          {
+            "adUnit": "banner",
+            "name": "Custom_Pause",
+            "pacing": {
+              "enabled": 0, 
+            "pacingMinutes": 3
+            }
+          }
+        ]
+      }
+}
