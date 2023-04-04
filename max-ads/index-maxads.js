@@ -10,8 +10,27 @@ const createAppApiUrl = 'https://o.applovin.com/mediation/v1/ad_unit';
     if(response.status !== 200) return false;
     console.log(response.data)
     return response.data;
+    //response
+    // {
+    //     "id": "1234567890abcdef",
+    //     "name": "My Inter Ad Unit",
+    //     "platform": "ios",
+    //     "package_name": "com.test.app",
+    //     "ad_format": "INTER",
+    //     "has_active_experiment": false, x
+    //     "disabled": false x
+    //  }
 }
 
+const configApp = async (app)=>{
+    const { has_active_experiment, disabled, ...requestData } = {...app, ...config.appConfig};
+    const createAppApiUrl = `https://o.applovin.com/mediation/v1/ad_unit/${requestData.id}`;
+    const data = config.appConfig; 
+    const response = await axios.post(createAppApiUrl,requestData);
+    if(response.status !== 200) return false;
+    console.log(response.data)
+    return response.data;
+}
 
 
 
@@ -21,6 +40,5 @@ const createAppApiUrl = 'https://o.applovin.com/mediation/v1/ad_unit';
         console.log("An Error occured while creating a app");
         return false
     }
-
-    
+    configApp(app);
 })();

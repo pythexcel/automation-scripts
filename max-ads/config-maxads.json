@@ -1,9 +1,156 @@
 {
     "appData":{
-        "name": "subwaysurf",
+        "name": "hillclimb",
         "platform": "android",
-        "package_name": "com.kiloo.subwaysurf",
+        "package_name": "com.fingersoft.hcr2",
         "ad_format": "INTER"
      },
-     "managementApiKey":"uh7CPy_HiWa5sbU5oLy4el0dCoTyLy1EWsIKayul2ia_Nd1oEiIegyUZ0fgwHLwBbFEVbEWxglNXikGCTAGZkN"
+     "managementApiKey":"uh7CPy_HiWa5sbU5oLy4el0dCoTyLy1EWsIKayul2ia_Nd1oEiIegyUZ0fgwHLwBbFEVbEWxglNXikGCTAGZkN",
+     "appConfig": {
+        "ad_network_settings": [
+           {
+              "FACEBOOK_NETWORK": {
+                 "disabled": false,
+                 "ad_network_ad_units": [
+                     {
+                        "ad_network_ad_unit_id": "8247030622430922_5618972399256249",
+                        "disabled": false
+                     }
+                 ]
+              }
+           },
+           {
+              "ADMOB_NETWORK": {
+                 "disabled": false,
+                 "ad_network_app_id": "ca-app-pub-3555987499620362~3024971981",
+                 "ad_network_ad_units": [
+                    {
+                       "ad_network_ad_unit_id": "ca-app-pub-3555987499620362/4382996128",
+                       "disabled": false,
+                       "cpm": "30.00",
+                       "countries": {
+                          "type": "INCLUDE",
+                          "values": [
+                             "us",
+                             "ca",
+                             "gb",
+                             "au"
+                          ]
+                       }
+                    },
+                    {
+                       "ad_network_ad_unit_id": "ca-app-pub-3555987499620362/5476585941",
+                       "disabled": false,
+                       "cpm": "20.00",
+                       "countries": {
+                          "type": "EXCLUDE",
+                          "values": [
+                             "us",
+                             "ca",
+                             "gb",
+                             "au"
+                          ]
+                       }
+                    }
+                 ]
+              }
+           }
+        ],
+        "frequency_capping_settings": [
+            {
+               "type": "time",
+               "time_capping_settings": {
+                  "day_limit": 10,
+                  "minute_frequency": 10
+               },
+               "session_capping_settings": {
+                  "session_limit": 0
+               },
+               "countries" : {
+                 "type": "INCLUDE",
+                 "values" : [
+                     "ca",
+                     "us"
+                 ]
+               }
+            }
+        ],
+        "bid_floors": [
+           {
+              "country_group_name": "t1 eng",
+              "cpm": "10.00",
+              "countries": {
+                 "type": "INCLUDE",
+                 "values": [
+                    "au",
+                    "ca",
+                    "gb",
+                    "nz",
+                    "us"
+                 ]
+              }
+           },
+           {
+              "country_group_name": "eea",
+              "cpm": "5.00",
+              "countries": {
+                 "type": "INCLUDE",
+                 "values": [
+                    "at",
+                    "pt",
+                    "ro",
+                    "se",
+                    "si",
+                    "sk"
+                 ]
+              }
+           }
+        ],
+        "banner_refresh_settings":{
+           "interval": 0
+        },
+        "segments":[
+           {
+              "id": 347324,
+              "name": "LAT iPads",
+              "id_type": "no_id",
+              "device_type": "tablets",
+              "genders": [],
+              "ages": {},
+              "keywords": []
+           },
+           {
+              "id": 347341,
+              "name": "Senior Men",
+              "id_type": "all",
+              "device_type": "all",
+              "genders": [
+                 "male", "unknown"
+              ],
+              "ages": {
+                 "min_age": 65,
+                 "max_age": 99
+              },
+              "keywords": []
+           },
+           {
+              "id": 347643,
+              "name": "fruit keywords",
+              "id_type": "all",
+              "device_type": "all",
+              "genders": [],
+              "ages": {},
+              "keywords": [
+                 [
+                    "+fruit:apple",
+                     "-fruit:banana"
+                 ],
+                 [
+                    "+fruit:orange",
+                    "+fruit:lemon"
+                 ]
+              ]
+           }
+        ]
+     }
 }
