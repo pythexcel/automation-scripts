@@ -1,0 +1,138 @@
+{
+    "secretKey":"75eb5509a2c5f14d6b39d0ffe8bfa855",
+    "refreshToken":"f902f7b51ddd9968ddf8a05f86cb54cb",
+    "useInstanceData": false,
+    "usePlacementData": false,
+    "useMediationData": false,
+    "appData": {
+        "storeUrl": "https://play.google.com/store/apps/details?id=com.dts.freefiremax",
+        "taxonomy": "puzzle",
+        "appName": "freefiremax",
+        "coppa":1,
+        "ccpa":0,
+        "adUnits": {
+          "RewardedVideo": "Live",
+          "Interstitial": "Live",
+          "OfferWall": "Off",
+          "Banner": "Live"
+        }
+      },
+      "instanceData" : {
+        "configurations": {
+          "ironSource": {
+            "interstitial": [
+              {
+                "instanceName": "low_interstitial",
+                "status": "active",
+                "pricing": [
+                  {
+                    "country": [
+                      "FR",
+                      "DE"
+                    ],
+                    "eCPM": 3
+                  }
+                ],
+                "pricingType": "eCPM"
+              },
+              {
+                "instanceName": "high_interstitial",
+                "status": "active",
+                "pricing": [
+                  {
+                    "country": [
+                      "IL",
+                      "US"
+                    ],
+                    "eCPM": 20
+                  }
+                ]
+              }
+            ]
+          },
+          "adColony": {
+            "rewardedVideo": [
+              {
+                "instanceName": "adcolony_rv",
+                "status": "active",
+                "zoneId": 102030,
+                "rate": 10
+              }
+            ]
+          }
+        }
+      },
+      "placementData" : {
+        "placements": [
+          {
+            "adUnit": "rewardedVideo",
+            "name": "Main_Menu",
+            "itemName": "coin",
+            "rewardAmount": 25, 
+            "capping": {
+                "enabled": 1,
+          "cappingLimit": 3,
+          "cappingInterval": "h" 
+            }
+          },
+          {
+            "adUnit": "banner",
+            "name": "Custom_Pause",
+            "pacing": {
+              "enabled": 0, 
+            "pacingMinutes": 3
+            }
+          }
+        ]
+      },
+      "mediationData":{
+        "adUnit": "rewardedVideo",
+        "groupCountries": [
+          "JP"
+        ],
+        "groupName": "Japan_High",
+        "adSourcePriority": {
+          "bidding": {
+            "instances": [
+              {
+                "providerName": "AdColony",
+                "instanceId": 12345
+              }
+            ]
+          },
+          "tier1": {
+            "tierType": "sortByCpm",
+            "instances": [
+              {
+                "providerName": "AppLovin",
+                "instanceId": 0,
+                "rate": 2.5
+              },
+              {
+                "tagId": 1234,
+                "rate": 1
+              }
+            ]
+          },
+          "tier2": {
+            "tierType": "optimized",
+            "instances": [
+              {
+                "providerName": "TapJoy",
+                "instanceId": 0
+              }
+            ]
+          },
+          "tier3": {
+            "tierType": "manual",
+            "instances": [
+              {
+                "providerName": "TapJoy",
+                "instanceId": 54321
+              }
+            ]
+          }
+        }
+      }
+
+}
