@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "inmobi":"node ./inmobi/index.mjs"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pythexcel/automation-scripts/issues"
   },
-  "homepage": "https://github.com/pythexcel/automation-scripts#readme"
+  "homepage": "https://github.com/pythexcel/automation-scripts#readme",
+  "dependencies": {
+    "puppeteer": "^19.8.3"
+  }
 }
