@@ -1,4 +1,6 @@
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
+const config = require('./config.json');
+const {email, password, app_url, app_name} = config;
 
 const waitForResponse = (page, url) => {
   return new Promise(resolve => {
@@ -16,10 +18,22 @@ const delay=(time)=>{
   });
 }
 
+const windowSet = async (page, name, value) => {
+  await page.evaluateOnNewDocument((name, value) => {
+    Object.defineProperty(window, name, {
+      value: value,
+      configurable: true
+    });
+  }, name, value);
+};
+  
+  
+
+
 (async () => {
   const browser = await puppeteer.launch({headless:false});
   const page = await browser.newPage();
-
+  await windowSet(page,'pass',password)
   await page.goto('https://publisher.inmobi.com/signup', {waitUntil:'networkidle0'});
   
 
@@ -29,7 +43,7 @@ const delay=(time)=>{
   await page.waitForSelector('button');
   await page.click('button');
   await page.waitForSelector('#email');
-  await page.type('#email', 'atul.etech2011@gmail.com');
+  await page.type('#email', email);
   await page.$eval('#btn-next',async(el)=>{
     console.log(el)
     await setTimeout(()=>{
@@ -38,12 +52,12 @@ const delay=(time)=>{
     
   })
   
-  await waitForResponse(page,"https://iam.inmobi.com/iam/v3/user/getAuth0UserDetails?email=atul.etech2011@gmail.com");
+  await waitForResponse(page,`https://iam.inmobi.com/iam/v3/user/getAuth0UserDetails?email=${email}`);
   await page.exposeFunction('#password',()=>{});
   await page.waitForSelector('#password');
   await page.$eval('#password', async(el) =>{
     await setTimeout(()=>{
-      el.value = 'Java@123';
+      el.value = pass;
     },1000)
   });
   await page.$eval('#btn-login', async(el) =>{
@@ -61,12 +75,12 @@ const delay=(time)=>{
   })
   await page.waitForSelector('.field__input');
   await delay(2000)
-  await page.type(".field__input",'https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb')
+  await page.type(".field__input",app_url)
   await waitForResponse(page,"https://publisher.inmobi.com/api/graphql");
   let inputs = await page.$$(".field__input")
   inputs[1].click({ clickCount: 3 })
   await delay(2000)
-  inputs[1].type('testname');
+  inputs[1].type(app_name);
   await page.waitForSelector('.css-1wuxrsi');
   await page.$eval('.css-1wuxrsi',(el)=>{
     el.click()
