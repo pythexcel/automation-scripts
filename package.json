@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "max-ads": "node ./max-ads/index-maxads.js",
-    "ironsource": "node ./ironsource/index-ironsource.js"
+    "ironsource": "node ./ironsource/index-ironsource.js",
+    "inmobi": "node ./inmobi/index.mjs"
   },
   "repository": {
     "type": "git",
