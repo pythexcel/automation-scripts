@@ -29,17 +29,13 @@ const windowSet = async (page, name, value) => {
 };
 
 ////////////////
-
-const createApp = async ({ email, password, app_url, app_name }) => {
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
+const login = async ({page, email, password})=>{
   await windowSet(page, 'pass', password)
   await page.goto('https://publisher.inmobi.com/signup', { waitUntil: 'networkidle0' });
 
-
   // Set screen size
   await page.setViewport({ width: 1080, height: 1024 });
-
+  console.log('logging In....')
   await page.waitForSelector('button');
   await page.click('button');
   await page.waitForSelector('#email');
@@ -66,6 +62,12 @@ const createApp = async ({ email, password, app_url, app_name }) => {
     }, 1000)
   });
   await page.waitForSelector('.css-1wuxrsi');
+  console.log('logged In')
+}
+const createApp = async ({ app_url, app_name, page }) => {
+  
+  console.log(await page.url())
+  console.log('Creating App...')
   await page.$eval('.css-1wuxrsi', (el) => {
     el.click()
   })
@@ -77,7 +79,7 @@ const createApp = async ({ email, password, app_url, app_name }) => {
   await delay(2000)
   await page.type(".field__input", app_url)
   await waitForResponse(page, "https://publisher.inmobi.com/api/graphql");
-  let inputs = await page.$$(".field__input")
+  const inputs = await page.$$(".field__input")
   inputs[1].click({ clickCount: 3 })
   await delay(2000)
   inputs[1].type(app_name);
@@ -102,12 +104,91 @@ const createApp = async ({ email, password, app_url, app_name }) => {
   await page.$eval('.css-1wuxrsi', (el) => {
     el.click()
   })
+  await page.waitForNavigation();
+  await page.waitForSelector('.css-ceuxau');
+  const pageUrl = await page.url();
+  const appId = pageUrl.split('/')[pageUrl.split('/').length-1];
+  console.log('App created:',appId)
+  return appId
+}
+
+const createPlacements = async ({page, appId, placements})=>{
+  await page.goto(`https://publisher.inmobi.com/my-inventory/app-and-placements/create-placement/${appId}`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.css-cb9ru8');
+  const placementElements = await page.$$(".css-cb9ru8")
+  const setPlacementConfig = async (placementName, abid, partner, testMode)=>{
+    console.log(placementName,'..............')
+    await page.waitForSelector('.form-control')
+    console.log('typing')
+    await page.type('.form-control', placementName);
+    console.log('typing done')
+    let dropdown;
+    if(abid){
+      dropDowns = await page.$$('.dropdown');
+      await dropDowns[0].click()
+      await page.waitForSelector('.dropdown__list-item')
+      await page.$eval('.dropdown__list-item',el=>el.click());
+      await delay(1000);
+      dropDowns = await page.$$('.dropdown');
+      await dropDowns[1].click();
+      await page.waitForSelector('.dropdown__list-item');
+      let dropDownsListItems = await page.$$('.dropdown__list-item');
+      for(listItem of dropDownsListItems){
+        const text = await page.evaluate(el => el.textContent, listItem)
+        if(text === partner){
+          await listItem.click();
+          break;
+        }
+      }
+      await delay(1000)
+      await dropDowns[2].click();
+      dropDownsListItems = await page.$$('.dropdown__list-item');
+      for(listItem of dropDownsListItems){
+        const text = await page.evaluate(el => el.textContent, listItem)
+        if(text === testMode){
+          await listItem.click();
+          break;
+        }
+      }
+    }else{
+      dropDowns = await page.$$('.dropdown');
+      await dropDowns[1].click();
+      dropDownsListItems = await page.$$('.dropdown__list-item');
+      for(listItem of dropDownsListItems){
+        const text = await page.evaluate(el => el.textContent, listItem)
+        if(text === testMode){
+          await listItem.click();
+          break;
+        }
+      }
+    }
+    await page.$eval('.css-1wuxrsi', (el) => {
+      el.click()
+    })
+  }
+  const indexOfPlacements = {
+    "interstitial":0,
+    "banner":1,
+    "rewarded":2,
+    "inStream":3,
+    "native":4
+  }
+  for(placement of placements){
+    const {type, placementName, audienceBidding, partner, testMode} = placement;
+    await placementElements[indexOfPlacements[type]].$eval('button', el => el.click());
+    await setPlacementConfig(placementName, audienceBidding, partner, testMode);
+  }
 }
 
 
 
-
 (async () => {
-  await createApp(config)
-
+  const browser = await puppeteer.launch({ headless: config.isHeadLess});
+  const page = await browser.newPage();
+  const args = {...config,page}
+  await login(args);
+  const appId = await createApp(args)
+  
+  await createPlacements({...args, appId})
+  await browser.close();
 })();
