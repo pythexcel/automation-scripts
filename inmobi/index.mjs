@@ -77,13 +77,11 @@ const delay=(time)=>{
   await waitForResponse(page,"https://publisher.inmobi.com/api/graphql");
   await page.waitForSelector('#radio-gdpr-true');
   await page.$eval('#radio-gdpr-true',(el)=>{
-    el.checked = true;
-    el.value = true;
+    el.click()
   })
   await page.waitForSelector('#radio-location-true');
   await page.$eval('#radio-location-true',(el)=>{
-    el.checked = true;
-    el.value=true;
+    el.click()
   })
   await delay(2000)
   await page.waitForSelector('.css-1wuxrsi');
