@@ -1,5 +1,5 @@
 {
-    "isHeadLess": true,
+    "isHeadLess": false,
     "email": "email",
     "password": "pass",
     "app_url": "https://play.google.com/store/apps/details?id=com.indie.shj.google.en",
