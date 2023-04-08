@@ -129,7 +129,7 @@ const createApp = async ({ app_url, app_name, page }, reAttempt) => {
     if (reAttempt < 5) {
       reAttempt += 1
       console.log(`reattempt ${reAttempt} out of 5`);
-      return await createApp({ page, email, password }, reAttempt)
+      return await createApp({ app_url, app_name, page }, reAttempt)
     }
     throw e;
   }
@@ -207,7 +207,7 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     if (reAttempt < 5) {
       reAttempt += 1
       console.log(`reattempt ${reAttempt} out of 5`);
-      return await createPlacements({ page, email, password }, reAttempt)
+      return await createPlacements({ page, appId, placements }, reAttempt)
     }
     throw e;
   }
