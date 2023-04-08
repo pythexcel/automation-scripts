@@ -1,7 +1,44 @@
 {
-    "email":"email",
-    "password":"pass",
-    "app_url":"https://play.google.com/store/apps/details?id=com.gameloft.android.ANMP.GloftA9HM",
-    "app_name":"testName"
-
+    "isHeadLess": true,
+    "email": "email",
+    "password": "pass",
+    "app_url": "https://play.google.com/store/apps/details?id=com.indie.shj.google.en",
+    "app_name": "testName11",
+    "placements": [
+        {
+            "type":"interstitial",
+            "placementName": "testPlacement",
+            "audienceBidding": true,
+            "partner": "Prebid",
+            "testMode": "Global"
+        },
+        {
+            "type":"banner",
+            "placementName": "",
+            "audienceBidding": false,
+            "partner": "",
+            "testMode": ""
+        },
+        {
+            "type":"rewarded",
+            "placementName": "",
+            "audienceBidding": false,
+            "partner": "",
+            "testMode": ""
+        },
+        {
+            "type":"inStream",
+            "placementName": "",
+            "audienceBidding": false,
+            "partner": "",
+            "testMode": ""
+        },
+        {
+            "type":"native",
+            "placementName": "",
+            "audienceBidding": false,
+            "partner": "",
+            "testMode": ""
+        }
+    ]
 }
