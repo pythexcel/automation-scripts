@@ -138,6 +138,7 @@ const createApp = async ({ app_url, app_name, page }, reAttempt) => {
 
 const createPlacements = async ({ page, appId, placements }, reAttempt) => {
   try{
+    console.log('creating placements')
     await page.goto(`https://publisher.inmobi.com/my-inventory/app-and-placements/create-placement/${appId}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.css-cb9ru8');
   const placementElements = await page.$$(".css-cb9ru8")
@@ -199,8 +200,10 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     const { type, placementName, audienceBidding, partner, testMode } = placement;
     await placementElements[indexOfPlacements[type]].$eval('button', el => el.click());
     await setPlacementConfig(placementName, audienceBidding, partner, testMode);
+    await waitForResponse(page, "https://publisher.inmobi.com/api/graphql");
   }
-  return true
+  console.log('placements created!')
+  return true;
   }catch(e){
     console.log('Placement creation failed!');
     if (!reAttempt) reAttempt = 0;
@@ -221,6 +224,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
   const args = { ...config, page }
   await login(args);
   const appId = await createApp(args)
-  await createPlacements({ ...args, appId })
+  await createPlacements({ ...args, appId:1679066514333 })
   await browser.close();
 })();
