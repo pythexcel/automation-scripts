@@ -224,6 +224,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
   const args = { ...config, page }
   await login(args);
   const appId = await createApp(args)
-  await createPlacements({ ...args, appId:1679066514333 })
+  await createPlacements({ ...args, appId })
   await browser.close();
 })();
