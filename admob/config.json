@@ -1,8 +1,36 @@
 {
     "isHeadLess":false,
-    "email":"atul.admautomation@gmail.com",
+    "email":"email",
     "password":"pass",
     "platform":"android",
-    "app_url":"https://play.google.com/store/apps/details?id=com.cyberlink.powerdirector.DRA140225_01"
+    "app_url":"https://play.google.com/store/apps/details?id=com.tbegames.and.top_speed_racing",
+    "placements":[
+        {
+            "adFormat": "banner",
+            "adUnitName":"NewAdUnit",
+            "adType":["Text, image, and rich media","Video"],
+            "automaticRefresh":"custom",
+            "automaticRefreshCustomValue":"125",
+            "ecmFloor":"Google optimized",
+            "ecmFloorGoogleOptimizedMethod":"All prices",
+            "ecmFloorManualGlobalFloor":"10", 
+            "ecmFloorManualFloor":[
+                {
+                    "continent":"Asia",
+                    "countries":[
+                        {
+                            "country":"Afghanistan",
+                            "ecmFloorValue":11
+                        },
+                        {
+                            "country":"Bangladesh",
+                            "ecmFloorValue":12
+                        }
+                    ]
+                }
+            ]
 
+
+        }
+    ]
 }

@@ -38,12 +38,12 @@ const login = async ({ page, email, password }, reAttempt) => {
         console.log('logging In....')
         await page.goto('https://accounts.google.com/v3/signin/identifier?dsh=S-419050728%3A1681109023429182&continue=https%3A%2F%2Fapps.admob.com%2Fv2%2Fhome&flowEntry=ServiceLogin&flowName=GlifWebSignIn&followup=https%3A%2F%2Fapps.admob.com%2Fv2%2Fhome&ifkv=AQMjQ7QXrWOt3C65ye4VOca0gxUYqPyEnhaQ8z7FLJNv1_kUp7XtvCVft60ntH9pZKVIBXEL6Che-Q&osid=1&passive=1209600&service=admob', { waitUntil: 'networkidle0' });
         await page.waitForSelector('#identifierId');
-        await page.type('#identifierId',email);
+        await page.type('#identifierId', email);
         await page.click('#identifierNext > div > button');
         await waitForResponse(page, `https://play.google.com/log?format=json&hasfast=true`);
         await page.waitForSelector('#password');
         await delay(2000)
-        await page.$eval('.zHQkBf',el=>el.value=pass);
+        await page.$eval('.zHQkBf', el => el.value = pass);
         await delay(2000)
         await page.click('#passwordNext > div > button');
         await page.waitForNavigation();
@@ -79,7 +79,7 @@ const createApp = async ({ app_url, page }, reAttempt) => {
         await page.click('.btn-yes');
         await page.waitForSelector('.input-area');
         await delay(2000)
-        await page.type('.input-area',app_url);
+        await page.type('.input-area', app_url);
         await page.click('.search-button');
         await page.waitForResponse('https://apps.admob.com/cam/_/rpc/AppService/Search?authuser=0');
         await page.waitForSelector('app-select-cell > material-button');
@@ -95,7 +95,7 @@ const createApp = async ({ app_url, page }, reAttempt) => {
         const pageUrl = await page.url();
         const appId = pageUrl.split('/')[pageUrl.split('/').length - 2];
 
-        console.log('App created:',appId)
+        console.log('App created:', appId)
         return appId;
     } catch (e) {
         console.log(e)
@@ -114,6 +114,90 @@ const createApp = async ({ app_url, page }, reAttempt) => {
 const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     try {
         console.log('creating placements')
+        await page.goto(`https://apps.admob.com/v2/apps/${appId}/adunits/create`, { waitUntil: 'networkidle0' });
+        const selectBtns = await page.$$('.select-button');
+        const bannerFun = async ({
+            adUnitName,
+            adType,
+            automaticRefresh,
+            automaticRefreshCustomValue,
+            ecmFloor,
+            ecmFloorGoogleOptimizedMethod,
+            ecmFloorManualGlobalFloor,
+            ecmFloorManualFloor
+        }) => {
+            await page.type('label > input', adUnitName);
+            await page.click('.advanced-settings-toggle');
+            await page.waitForSelector('.ripple')
+            const selections = await page.$$('.ripple');
+            await selections[0].click();
+            await selections[1].click();
+            if (adType.includes("Text, image, and rich media")) await selections[0].click();
+            if (adType.includes("Video")) await selections[1].click();
+
+            const actions = {
+                "google optimized": async () => await selections[2].click(),
+                "disabled": async () => await selections[4].click(),
+                "custom": async () => {
+                    await selections[3].click();
+                    await delay(1000);
+                    const input = (await page.$$('label > input'))[1];
+                    await input.click({ clickCount: 3 });
+                    await input.type(automaticRefreshCustomValue);
+                }
+            };
+            await actions[automaticRefresh.toLowerCase()]();
+            const floors = {
+                "disabled": async () => await selections[7].click(),
+                "google optimized": async () =>{
+                    await selections[5].click();//8 9 10
+                    const indeces = {
+                        "high floor":8,
+                        "medium floor":9,
+                        "all prices": 10
+                    };
+                    await selections[indeces[ecmFloorGoogleOptimizedMethod.toLowerCase()]].click();
+                },
+                "manual floor": async () => {
+                    await selections[6].click();
+                    const index = automaticRefresh.toLowerCase() === "custom" ? 2 : 1;
+                    const input = (await page.$$('label > input'))[index];
+                    await input.click({ clickCount: 3 });
+                    await input.type(ecmFloorManualGlobalFloor);
+                    await page.click('manual-ecpm-floor-input > material-button');
+                    const continents = await page.$$('material-picker-lobby > div > div > material-picker-section > span > div > material-picker-item > div > material-checkbox > div.icon-container > material-ripple');
+
+                }
+            }
+            await floors[ecmFloor.toLowerCase()]();
+            await delay(1000);
+            await page.click('material-yes-no-buttons > material-button.btn.btn-yes');
+
+        }
+        for (placement of placements) {
+            switch (placement.adFormat) {
+                case "banner":
+                    await selectBtns[0].click();
+                    await bannerFun(placement)
+                    break;
+                case "interstitial":
+                    await selectBtns[1].click();
+                    break;
+                case "rewarded interstitial":
+                    await selectBtns[2].click();
+                    break;
+                case "rewarded":
+                    await selectBtns[3].click();
+                    break;
+                case "native advance":
+                    await selectBtns[4].click();
+                    break;
+                case "app open":
+                    await selectBtns[5].click();
+                    break;
+                default: break;
+            }
+        }
 
         console.log('placements created!')
         return true;
@@ -137,6 +221,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     const args = { ...config, page }
     await login(args);
     const appId = await createApp(args)
-    // await createPlacements({ ...args, appId })
-    // await browser.close();
+    await createPlacements({ ...args, appId })
+    await browser.close();
 })();
