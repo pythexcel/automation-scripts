@@ -32,7 +32,7 @@ const windowSet = async (page, name, value) => {
 ////////////////
 const login = async ({ page, email, password }, reAttempt) => {
     try {
-        await windowSet(page, 'pass', password)
+        await windowSet(page, 'pass', password);
         // Set screen size
         await page.setViewport({ width: 1080, height: 1024 });
         console.log('logging In....')
@@ -124,7 +124,7 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
             ecmFloor,
             ecmFloorGoogleOptimizedMethod,
             ecmFloorManualGlobalFloor,
-            ecmFloorManualFloor
+            ecmFloorManualFloors
         }) => {
             await page.type('label > input', adUnitName);
             await page.click('.advanced-settings-toggle');
@@ -149,11 +149,11 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
             await actions[automaticRefresh.toLowerCase()]();
             const floors = {
                 "disabled": async () => await selections[7].click(),
-                "google optimized": async () =>{
+                "google optimized": async () => {
                     await selections[5].click();//8 9 10
                     const indeces = {
-                        "high floor":8,
-                        "medium floor":9,
+                        "high floor": 8,
+                        "medium floor": 9,
                         "all prices": 10
                     };
                     await selections[indeces[ecmFloorGoogleOptimizedMethod.toLowerCase()]].click();
@@ -166,6 +166,70 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
                     await input.type(ecmFloorManualGlobalFloor);
                     await page.click('manual-ecpm-floor-input > material-button');
                     const continents = await page.$$('material-picker-lobby > div > div > material-picker-section > span > div > material-picker-item > div > material-checkbox > div.icon-container > material-ripple');
+                    const Continents = {
+                        "africa": {
+                            value: false,
+                            click: async function () {
+                                await continents[0].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Americas": {
+                            value: false,
+                            click: async function () {
+                                await continents[1].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Asia": {
+                            value: false,
+                            click: async function () {
+                                await continents[2].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Europe": {
+                            value: false,
+                            click: async function () {
+                                await continents[3].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Oceania": {
+                            value: false,
+                            click: async function () {
+                                await continents[4].click();
+                                this.value = !this.values;
+                            }
+                        },
+                    };
+                    const setCountriesEcpmFloor = async (countryElements, countries) => {
+                        for (country of countries) {
+                            for (cElement of countryElements) {
+                                const elementValue = await page.evaluate(el => el.textContent, cElement['div']);
+                                if (elementValue !== country.country)continue;
+                                await cElement['input'].click({ clickCount: 3 });
+                                await cElement['input'].type(String(country.ecmFloorValue));
+                                // await cElement['input'].focus();
+                                // await cElement['input'].keyboard.type(country.ecmFloorValue)
+                            }
+                        }
+                    };
+                    for (const efmf of ecmFloorManualFloors) {
+                        if (!Continents[efmf.continent].value) await Continents[efmf.continent].click();
+                        await delay(1000);
+                        const allDivElements = await page.$$('country-picker-cart-item > div');
+                        const allInputElements = await page.$$('country-picker-cart-item > material-input > div > div > label > input');
+                        const countryElements = []
+                        allDivElements.forEach((el, i) => {
+                            countryElements.push({
+                                "div": el,
+                                "input": allInputElements[i]
+                            })
+                        })
+                        await setCountriesEcpmFloor(countryElements, efmf.countries);
+                    }
+
 
                 }
             }
@@ -203,6 +267,7 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
         return true;
     } catch (e) {
         console.log('Placement creation failed!');
+        console.log(e)
         if (!reAttempt) reAttempt = 0;
         if (reAttempt < 5) {
             reAttempt += 1
@@ -221,6 +286,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     const args = { ...config, page }
     await login(args);
     const appId = await createApp(args)
-    await createPlacements({ ...args, appId })
+    await createPlacements({ ...args, appId})
     await browser.close();
 })();

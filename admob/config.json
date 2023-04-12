@@ -11,10 +11,10 @@
             "adType":["Text, image, and rich media","Video"],
             "automaticRefresh":"custom",
             "automaticRefreshCustomValue":"125",
-            "ecmFloor":"Google optimized",
+            "ecmFloor":"Manual floor",
             "ecmFloorGoogleOptimizedMethod":"All prices",
             "ecmFloorManualGlobalFloor":"10", 
-            "ecmFloorManualFloor":[
+            "ecmFloorManualFloors":[
                 {
                     "continent":"Asia",
                     "countries":[
