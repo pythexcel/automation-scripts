@@ -115,7 +115,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     try {
         console.log('creating placements')
         await page.goto(`https://apps.admob.com/v2/apps/${appId}/adunits/create`, { waitUntil: 'networkidle0' });
-        const selectBtns = await page.$$('.select-button');
         const bannerFun = async ({
             adUnitName,
             adType,
@@ -207,11 +206,244 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
                         for (country of countries) {
                             for (cElement of countryElements) {
                                 const elementValue = await page.evaluate(el => el.textContent, cElement['div']);
-                                if (elementValue !== country.country)continue;
+                                if (elementValue !== country.country) continue;
                                 await cElement['input'].click({ clickCount: 3 });
                                 await cElement['input'].type(String(country.ecmFloorValue));
-                                // await cElement['input'].focus();
-                                // await cElement['input'].keyboard.type(country.ecmFloorValue)
+                            }
+                        }
+                    };
+                    for (const efmf of ecmFloorManualFloors) {
+                        if (!Continents[efmf.continent].value) await Continents[efmf.continent].click();
+                        await delay(1000);
+                        const allDivElements = await page.$$('country-picker-cart-item > div');
+                        const allInputElements = await page.$$('country-picker-cart-item > material-input > div > div > label > input');
+                        const countryElements = []
+                        allDivElements.forEach((el, i) => {
+                            countryElements.push({
+                                "div": el,
+                                "input": allInputElements[i]
+                            })
+                        })
+                        await setCountriesEcpmFloor(countryElements, efmf.countries);
+                    }
+
+
+                }
+            }
+            await floors[ecmFloor.toLowerCase()]();
+            await delay(1000);
+            await page.click('material-yes-no-buttons > material-button.btn.btn-yes');
+
+        }
+        const interstitialFun = async ({
+            adUnitName,
+            adType,
+            frequencyCapping,
+            ecmFloor,
+            ecmFloorGoogleOptimizedMethod,
+            ecmFloorManualGlobalFloor,
+            ecmFloorManualFloors
+        }) => {
+            await page.type('label > input', adUnitName);
+            await page.click('.advanced-settings-toggle');
+            await page.waitForSelector('.ripple')
+            const selections = await page.$$('.ripple');
+            await selections[0].click();
+            await selections[1].click();
+            if (adType.includes("Text, image, and rich media")) await selections[0].click();
+            if (adType.includes("Video")) await selections[1].click();
+            if (frequencyCapping.enable) {
+                await page.waitForSelector('.tgl-btn')
+                await page.click('.tgl-btn');
+                const finputs = await page.$$('frequency-cap-input > div > material-input > div > div > label > input');
+                await finputs[0].type(frequencyCapping.showNoMoreThan);
+                await finputs[1].type(frequencyCapping.impressionsPerUser);
+
+                await page.click('material-dropdown-select');
+                await page.waitForSelector('material-select-dropdown-item');
+                const timeUnitList = await page.$$('material-select-dropdown-item');
+                for (const timeUnit of timeUnitList) {
+                    const timeUnitOfElement = await page.evaluate(el => el.textContent.trim(), timeUnit);
+                    if (timeUnitOfElement === frequencyCapping.timeUnit) {
+                        console.log(timeUnitOfElement, frequencyCapping.timeUnit, timeUnit)
+                        await delay(1000);
+                        await timeUnit.click();
+                        break;
+                    }
+                }
+            }
+            const floors = {
+                "disabled": async () => await selections[4].click(),
+                "google optimized": async () => {
+                    await selections[2].click();//8 9 10
+                    const indeces = {
+                        "high floor": 5,
+                        "medium floor": 6,
+                        "all prices": 7
+                    };
+                    await selections[indeces[ecmFloorGoogleOptimizedMethod.toLowerCase()]].click();
+                },
+                "manual floor": async () => {
+                    await selections[3].click();
+                    await page.click('manual-ecpm-floor-input > material-input > div > div > label > input', { clickCount: 3 });
+                    await page.type('manual-ecpm-floor-input > material-input > div > div > label > input', ecmFloorManualGlobalFloor);
+                    await page.click('manual-ecpm-floor-input > material-button');
+                    const continents = await page.$$('material-picker-lobby > div > div > material-picker-section > span > div > material-picker-item > div > material-checkbox > div.icon-container > material-ripple');
+                    const Continents = {
+                        "africa": {
+                            value: false,
+                            click: async function () {
+                                await continents[0].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Americas": {
+                            value: false,
+                            click: async function () {
+                                await continents[1].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Asia": {
+                            value: false,
+                            click: async function () {
+                                await continents[2].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Europe": {
+                            value: false,
+                            click: async function () {
+                                await continents[3].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Oceania": {
+                            value: false,
+                            click: async function () {
+                                await continents[4].click();
+                                this.value = !this.values;
+                            }
+                        },
+                    };
+                    const setCountriesEcpmFloor = async (countryElements, countries) => {
+                        for (country of countries) {
+                            for (cElement of countryElements) {
+                                const elementValue = await page.evaluate(el => el.textContent, cElement['div']);
+                                if (elementValue !== country.country) continue;
+                                await cElement['input'].click({ clickCount: 3 });
+                                await cElement['input'].type(String(country.ecmFloorValue));
+                            }
+                        }
+                    };
+                    for (const efmf of ecmFloorManualFloors) {
+                        if (!Continents[efmf.continent].value) await Continents[efmf.continent].click();
+                        await delay(1000);
+                        const allDivElements = await page.$$('country-picker-cart-item > div');
+                        const allInputElements = await page.$$('country-picker-cart-item > material-input > div > div > label > input');
+                        const countryElements = []
+                        allDivElements.forEach((el, i) => {
+                            countryElements.push({
+                                "div": el,
+                                "input": allInputElements[i]
+                            })
+                        })
+                        await setCountriesEcpmFloor(countryElements, efmf.countries);
+                    }
+
+
+                }
+            }
+            await floors[ecmFloor.toLowerCase()]();
+            await delay(1000);
+            await page.click('material-yes-no-buttons > material-button.btn.btn-yes');
+
+
+        }
+        const rewardedFun = async ({
+            adUnitName,
+            adTypeVideo,
+            rewardSettings,
+            frequencyCapping,
+            ecmFloor,
+            ecmFloorGoogleOptimizedMethod,
+            ecmFloorManualGlobalFloor,
+            ecmFloorManualFloors
+        }) => {
+            await page.waitForSelector('.advanced-settings-toggle');
+            await page.click('.advanced-settings-toggle');
+            await delay(1000);
+            const inputs = await page.$$('.input-area');
+            const checkBoxes = await page.$$('material-checkbox');
+            await inputs[0].type(adUnitName);
+            await inputs[1].click({ clickCount: 3 });
+            await inputs[1].type(rewardSettings.amount);
+            await inputs[2].click({ clickCount: 3 });
+            await inputs[2].type(rewardSettings.item);
+            if (!rewardSettings.applyToAll) await checkBoxes[0].click();
+            if (!adTypeVideo) await checkBoxes[1].click();
+            const selections = await page.$$('.ripple');
+            const floors = {
+                "disabled": async () => await selections[4].click(),
+                "google optimized": async () => {
+                    await selections[2].click();//8 9 10
+                    const indeces = {
+                        "high floor": 5,
+                        "medium floor": 6,
+                        "all prices": 7
+                    };
+                    await selections[indeces[ecmFloorGoogleOptimizedMethod.toLowerCase()]].click();
+                },
+                "manual floor": async () => {
+                    await selections[3].click();
+                    await page.click('manual-ecpm-floor-input > material-input > div > div > label > input', { clickCount: 3 });
+                    await page.type('manual-ecpm-floor-input > material-input > div > div > label > input', ecmFloorManualGlobalFloor);
+                    await page.click('manual-ecpm-floor-input > material-button');
+                    const continents = await page.$$('material-picker-lobby > div > div > material-picker-section > span > div > material-picker-item > div > material-checkbox > div.icon-container > material-ripple');
+                    const Continents = {
+                        "africa": {
+                            value: false,
+                            click: async function () {
+                                await continents[0].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Americas": {
+                            value: false,
+                            click: async function () {
+                                await continents[1].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Asia": {
+                            value: false,
+                            click: async function () {
+                                await continents[2].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Europe": {
+                            value: false,
+                            click: async function () {
+                                await continents[3].click();
+                                this.value = !this.values;
+                            }
+                        },
+                        "Oceania": {
+                            value: false,
+                            click: async function () {
+                                await continents[4].click();
+                                this.value = !this.values;
+                            }
+                        },
+                    };
+                    const setCountriesEcpmFloor = async (countryElements, countries) => {
+                        for (country of countries) {
+                            for (cElement of countryElements) {
+                                const elementValue = await page.evaluate(el => el.textContent, cElement['div']);
+                                if (elementValue !== country.country) continue;
+                                await cElement['input'].click({ clickCount: 3 });
+                                await cElement['input'].type(String(country.ecmFloorValue));
                             }
                         }
                     };
@@ -239,6 +471,7 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
 
         }
         for (placement of placements) {
+            const selectBtns = await page.$$('.select-button');
             switch (placement.adFormat) {
                 case "banner":
                     await selectBtns[0].click();
@@ -246,21 +479,16 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
                     break;
                 case "interstitial":
                     await selectBtns[1].click();
-                    break;
-                case "rewarded interstitial":
-                    await selectBtns[2].click();
+                    await interstitialFun(placement)
                     break;
                 case "rewarded":
                     await selectBtns[3].click();
-                    break;
-                case "native advance":
-                    await selectBtns[4].click();
-                    break;
-                case "app open":
-                    await selectBtns[5].click();
+                    await rewardedFun(placement)
                     break;
                 default: break;
             }
+            await page.waitForSelector('.copy-button');
+            await page.goto(`https://apps.admob.com/v2/apps/${appId}/adunits/create`, { waitUntil: 'networkidle0' });
         }
 
         console.log('placements created!')
