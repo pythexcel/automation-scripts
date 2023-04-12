@@ -1,0 +1,103 @@
+{
+    "isHeadLess": true,
+    "email": "email",
+    "password": "pass",
+    "platform": "android",
+    "app_url": "https://play.google.com/store/apps/details?id=com.tbegames.and.top_speed_racing",
+    "placements": [
+        {
+            "adFormat": "banner",
+            "adUnitName": "NewAdUnit",
+            "adType": [
+                "Text, image, and rich media",
+                "Video"
+            ],
+            "automaticRefresh": "custom",
+            "automaticRefreshCustomValue": "125",
+            "ecmFloor": "Manual floor",
+            "ecmFloorGoogleOptimizedMethod": "All prices",
+            "ecmFloorManualGlobalFloor": "10",
+            "ecmFloorManualFloors": [
+                {
+                    "continent": "Asia",
+                    "countries": [
+                        {
+                            "country": "Afghanistan",
+                            "ecmFloorValue": 11
+                        },
+                        {
+                            "country": "Bangladesh",
+                            "ecmFloorValue": 12
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "adFormat": "interstitial",
+            "adUnitName": "NewAdUnit",
+            "adType": [
+                "Text, image, and rich media",
+                "Video"
+            ],
+            "frequencyCapping": {
+                "enable": true,
+                "showNoMoreThan": "2",
+                "impressionsPerUser": "2",
+                "timeUnit": "hours"
+            },
+            "ecmFloor": "Manual floor",
+            "ecmFloorGoogleOptimizedMethod": "All prices",
+            "ecmFloorManualGlobalFloor": "10",
+            "ecmFloorManualFloors": [
+                {
+                    "continent": "Asia",
+                    "countries": [
+                        {
+                            "country": "Afghanistan",
+                            "ecmFloorValue": 11
+                        },
+                        {
+                            "country": "Bangladesh",
+                            "ecmFloorValue": 12
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "adFormat": "rewarded",
+            "adUnitName": "NewAdUnit",
+            "rewardSettings": {
+                "amount": "",
+                "item": "",
+                "applyToAll":true
+            },
+            "adTypeVideo": true,
+            "frequencyCapping": {
+                "enable": true,
+                "showNoMoreThan": "2",
+                "impressionsPerUser": "2",
+                "timeUnit": "hours"
+            },
+            "ecmFloor": "Manual floor",
+            "ecmFloorGoogleOptimizedMethod": "All prices",
+            "ecmFloorManualGlobalFloor": "10",
+            "ecmFloorManualFloors": [
+                {
+                    "continent": "Asia",
+                    "countries": [
+                        {
+                            "country": "Afghanistan",
+                            "ecmFloorValue": 11
+                        },
+                        {
+                            "country": "Bangladesh",
+                            "ecmFloorValue": 12
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
