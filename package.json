@@ -8,7 +8,8 @@
     "max-ads": "node ./max-ads/index-maxads.js",
     "ironsource": "node ./ironsource/index-ironsource.js",
     "inmobi": "node ./inmobi/index.js",
-    "admob": "node ./admob/index.js"
+    "admob": "node ./admob/index.js",
+    "meta": "node ./meta/index.js"
   },
   "repository": {
     "type": "git",
