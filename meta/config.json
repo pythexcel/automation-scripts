@@ -1,104 +1,34 @@
 {
-    "isHeadLess": false,
-    "email": "shashanksaraswat@highpolar.io",
-    "password": "Admin@123",
+    "isHeadLess": true,
+    "email": "email",
+    "password": "pass",
     "platform": "android",
-    "propertyName":"testproperty",
-    "app_url": "https://play.google.com/store/apps/details?id=com.plongo.nvcharts&hl=en&gl=US",
+    "propertyName":"testproperty1",
+    "app_url": "https://play.google.com/store/apps/details?id=com.codepoint.learnreactjspro",
     "placements": [
         {
-            "adFormat": "banner",
-            "adUnitName": "NewAdUnit",
-            "adType": [
-                "Text, image, and rich media",
-                "Video"
-            ],
-            "automaticRefresh": "custom",
-            "automaticRefreshCustomValue": "125",
-            "ecmFloor": "Manual floor",
-            "ecmFloorGoogleOptimizedMethod": "All prices",
-            "ecmFloorManualGlobalFloor": "10",
-            "ecmFloorManualFloors": [
-                {
-                    "continent": "Asia",
-                    "countries": [
-                        {
-                            "country": "Afghanistan",
-                            "ecmFloorValue": 11
-                        },
-                        {
-                            "country": "Bangladesh",
-                            "ecmFloorValue": 12
-                        }
-                    ]
-                }
-            ]
+            "placementType": "banner",
+            "placementName": "NewAdUnit1"
         },
         {
-            "adFormat": "interstitial",
-            "adUnitName": "NewAdUnit",
-            "adType": [
-                "Text, image, and rich media",
-                "Video"
-            ],
-            "frequencyCapping": {
-                "enable": true,
-                "showNoMoreThan": "2",
-                "impressionsPerUser": "2",
-                "timeUnit": "hours"
-            },
-            "ecmFloor": "Manual floor",
-            "ecmFloorGoogleOptimizedMethod": "All prices",
-            "ecmFloorManualGlobalFloor": "10",
-            "ecmFloorManualFloors": [
-                {
-                    "continent": "Asia",
-                    "countries": [
-                        {
-                            "country": "Afghanistan",
-                            "ecmFloorValue": 11
-                        },
-                        {
-                            "country": "Bangladesh",
-                            "ecmFloorValue": 12
-                        }
-                    ]
-                }
-            ]
+            "placementType": "interstitial",
+            "placementName": "NewAdUnit2"
         },
         {
-            "adFormat": "rewarded",
-            "adUnitName": "NewAdUnit",
-            "rewardSettings": {
-                "amount": "",
-                "item": "",
-                "applyToAll":true
-            },
-            "adTypeVideo": true,
-            "frequencyCapping": {
-                "enable": true,
-                "showNoMoreThan": "2",
-                "impressionsPerUser": "2",
-                "timeUnit": "hours"
-            },
-            "ecmFloor": "Manual floor",
-            "ecmFloorGoogleOptimizedMethod": "All prices",
-            "ecmFloorManualGlobalFloor": "10",
-            "ecmFloorManualFloors": [
-                {
-                    "continent": "Asia",
-                    "countries": [
-                        {
-                            "country": "Afghanistan",
-                            "ecmFloorValue": 11
-                        },
-                        {
-                            "country": "Bangladesh",
-                            "ecmFloorValue": 12
-                        }
-                    ]
-                }
-            ]
+            "placementType": "medium rectangle",
+            "placementName": "NewAdUnit3"
+        },
+        {
+            "placementType": "native",
+            "placementName": "NewAdUnit4"
+        },
+        {
+            "placementType": "native banner",
+            "placementName": "NewAdUnit5"
+        },
+        {
+            "placementType": "rewarded interstital",
+            "placementName": "NewAdUnit7"
         }
     ]
 }

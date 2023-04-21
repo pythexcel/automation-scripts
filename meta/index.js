@@ -32,7 +32,7 @@ const windowSet = async (page, name, value) => {
 
 
 ////////////////
-const login = async ({page, email, password}, reAttempt) => {
+const login = async ({ page, email, password }, reAttempt) => {
     try {
         await page.setViewport({ width: 1080, height: 1024 });
         console.log('logging In....')
@@ -76,20 +76,28 @@ const createApp = async ({ app_url, page, propertyName }, reAttempt) => {
         await page.waitForSelector('._2wl2._2wl3._2wl4:nth-of-type(2)');
         await page.click('._2wl2._2wl3._2wl4:nth-of-type(2)');
         await page.waitForSelector('.x19lwn94 > div > div > input');
-        for(let i=0; i<app_url.length; i++){
+        for (let i = 0; i < app_url.length; i++) {
             await page.type('.x19lwn94 > div > div > input', app_url[i])
             await delay(10)
-            if(i === app_url.length-2) await delay(2000)
+            if (i === app_url.length - 2) await delay(2000)
         }
         await delay(5000);
         await page.click('div.x1y1aw1k > div > div');
+        while(!(await page.$$('div.x1y1aw1k > div > div:nth-of-type(2)')).length){
+            await delay(1000)
+            await page.click('div.x1y1aw1k > div > div');
+        }
         await page.waitForSelector('div.x1y1aw1k > div > div:nth-of-type(2)');
         await page.click('div.x1y1aw1k > div > div:nth-of-type(2)');
+        while(!(await page.$$('.xo71vjh > div > div > div > div')).length){
+            await delay(1000)
+            await page.click('div.x1y1aw1k > div > div:nth-of-type(2)');
+        }
         await page.waitForSelector('.xo71vjh > div > div > div > div');
         await page.click('.xo71vjh > div > div > div > div');
         (await page.$$('div.x1iyjqo2.xamitd3 > div > div'))[10].click()
         await page.waitForSelector('div._3qn7._61-3 > span');
-        
+
         // await page.type('.x19lwn94 > div > div > input', app_url+'a')
         const appId = await page.$eval('div._3qn7._61-3 > span', el => el.innerText);
         console.log('App created:', appId)
@@ -111,6 +119,30 @@ const createApp = async ({ app_url, page, propertyName }, reAttempt) => {
 const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     try {
         console.log('creating placements')
+        const placementIndeces = {
+            "banner":1,
+            "interstitial":2,
+            "medium rectangle":3,
+            "native":4,
+            "native banner":5,
+            "rewarded interstital":6
+        }
+        for (const {placementType, placementName}of placements) {
+            await page.waitForSelector('div._3qn7._61-0 > div > div.xxymvpz:nth-of-type(2)');
+            await page.click('div._3qn7._61-0 > div > div.xxymvpz:nth-of-type(2)');
+            await page.waitForSelector('div > div > div > input');
+            await page.type('div > div > div > input', placementName);
+            await page.waitForSelector('.xexx8yu > div:nth-child(3) > div > div > div > div:nth-child(1) > div');
+            await page.waitForSelector(`.x78zum5.x152qxlz:nth-of-type(${placementIndeces[placementType]})`)
+            await page.click(`.x78zum5.x152qxlz:nth-of-type(${placementIndeces[placementType]})`);
+            await page.waitForSelector('div.x1qjc9v5 > div > div > div > div > div.xeuugli.x2lwn1j > div > div:nth-child(2) > div')
+            await page.click('div.x1qjc9v5 > div > div > div > div > div.xeuugli.x2lwn1j > div > div:nth-child(2) > div');
+            await delay(2000)
+        }
+        await delay(1000);
+        await page.click('div.xh8yej3 > div:nth-child(4) > div > div > div:nth-child(2) > div')
+
+
         console.log('placements created!')
         return true;
     } catch (e) {
@@ -132,6 +164,6 @@ const createPlacements = async ({ page, appId, placements }, reAttempt) => {
     const args = { ...config, page }
     await login(args);
     const appId = await createApp(args)
-//     await createPlacements({ ...args, appId})
-//     await browser.close();
+    await createPlacements({ ...args, appId })
+        await browser.close();
 })();
